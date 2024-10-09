@@ -40,5 +40,15 @@
 
     ou executar o arquivo run.bat
 
+### Executar os testes da API
+- Importar a collection no postman
+- Clicar em SEND
+- Após a execução navegar até Tests Results
+
 ### Importante
     A automação necessita estar no arquivo C: para execução com o run.bat e este arquivo só funciona no windows. Para visualizar o relatório gerado vá na pasta results e acesse o arquivo log.html
+
+### Evidencias de testes
+![log](./prime-robot-orange/04-img/log.png)
+![api](./prime-robot-orange/04-img/api01.png)
+![api](./prime-robot-orange/04-img/api02.png)
