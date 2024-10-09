@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "7d45687e-ae0b-40cb-87aa-4ce5d722a489",
+		"name": "TestAPIPrime",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24904797"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Armazenar o JSON da resposta\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"// Verificar se a resposta é um array e acessar o primeiro elemento\r",
+							"pm.test(\"Response body contains 'idade'\", function () {\r",
+							"    pm.expect(responseJson[0]).to.have.property('idade'); // Acessa o primeiro elemento\r",
+							"});\r",
+							"\r",
+							"// Verificar o sexo\r",
+							"pm.test(\"Sexo is 'Masculino'\", function () {\r",
+							"    pm.expect(responseJson[0].sexo).to.eql(\"Masculino\"); // Acessa o primeiro elemento\r",
+							"});\r",
+							"\r",
+							"// Verificar que o sexo não é 'Feminino'\r",
+							"pm.test(\"Sexo is not 'Feminino'\", function () {\r",
+							"    pm.expect(responseJson[0].sexo).to.not.eql(\"Feminino\"); // Acessa o primeiro elemento\r",
+							"});\r",
+							"\r",
+							"// Armazenar o CPF em uma variável\r",
+							"pm.test(\"Store CPF in variable\", function () {\r",
+							"    var cpf = responseJson[0].cpf; // Acessa o primeiro elemento\r",
+							"    pm.environment.set(\"cpf\", cpf);\r",
+							"});\r",
+							"\r",
+							"// Verificar se o CPF é válido\r",
+							"pm.sendRequest({\r",
+							"    url: 'https://www.4devs.com.br/ferramentas_online.php', // URL do serviço de validação de CPF\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/x-www-form-urlencoded'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'urlencoded',\r",
+							"        urlencoded: [\r",
+							"            { key: 'acao', value: 'validar_cpf', disabled: false },\r",
+							"            { key: 'txt_cpf', value: pm.environment.get(\"cpf\"), disabled: false }\r",
+							"        ]\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err); // Log de erro para depuração\r",
+							"        return;\r",
+							"    }\r",
+							"    \r",
+							"    pm.test(\"CPF is valid\", function () {\r",
+							"        try {\r",
+							"            var body = res.json();\r",
+							"            pm.expect(body).to.have.property('valid', true); // Verifica se o CPF é válido\r",
+							"        } catch (e) {\r",
+							"            console.error(\"Invalid JSON response:\", e); // Log de erro para resposta inválida\r",
+							"        }\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"// Limpar a variável CPF\r",
+							"pm.environment.unset(\"cpf\");\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "acao",
+							"value": "gerar_pessoa",
+							"description": "teste",
+							"type": "text"
+						},
+						{
+							"key": "pontuacao",
+							"value": "N",
+							"type": "text"
+						},
+						{
+							"key": "sexo",
+							"value": "H",
+							"type": "text"
+						},
+						{
+							"key": "txt_qtde",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://www.4devs.com.br/ferramentas_online.php",
+					"protocol": "https",
+					"host": [
+						"www",
+						"4devs",
+						"com",
+						"br"
+					],
+					"path": [
+						"ferramentas_online.php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
